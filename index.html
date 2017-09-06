@@ -15,29 +15,88 @@
     <div id='react-container'></div>
     <script type="text/babel">
 
+        //Note Class
         var Note = React.createClass ({
-            render() {
+            getInitialState() {
+                return {editing: false}
+            },
+            edit() {
+                this.setState({editing: true});
+            },
+            save() {
+                var val = this.refs.newText.value;
+                alert("This value will be saved: " + val);
+                this.setState({editing: false});
+            },
+            remove() {
+                alert("Removing Note")
+            },
+            renderForm() {
                 return (
                     <div className="note">
-                        <p></p>
+                        <textarea ref="newText"></textarea>
+                        <button onClick={this.save}>Save!</button>
+                    </div>
+                )
+            },
+            renderDisplay() {
+                return (
+                    <div className="note">
+                        <p>{this.props.children}</p>
                         <span>
-                            <button>Edit</button>
-                            <button>X</button>
+                            <button onClick={this.edit}>Edit</button>
+                            <button onClick={this.remove}>X</button>
                         </span>
                     </div>
                 )
+            },
+            render() {
+                return this.state.editing ? this.renderForm() : this.renderDisplay()
+
+
+                // if (this.state.editing === true) {
+                //     return this.renderForm();
+                // } else {
+                //     return this.renderDisplay();
+                // }
             }
         })
 
-
         ReactDOM.render(
-            <Note />,
+            <Note>Take out the trash!</Note>,
             document.getElementById('react-container')
         );
 
-
-
     </script>
+
+
+
+
+    <!-- <script type="text/babel">
+        var Checkbox = React.createClass ({
+            getInitialState() {
+                return { checked: true }
+            },
+            handleCheck() {
+                this.setState({ checked: !this.state.checked })
+            },
+            render() {
+                var msg;
+                if (this.state.checked) {
+                    msg = "checked";
+                } else {
+                    msg = "unchecked"
+                }
+                return( <div>
+                        <input type="checkbox" onChange={this.handleCheck} defaultChecked={this.state.checked}/>
+                        <p>This box is {msg}.</p>
+                    </div>)
+            }
+        });
+
+        ReactDOM.render(<Checkbox />,
+            document.getElementById('react-container'));
+    </script> -->
 </body>
 <script type="text/javascript" src="js/app.js"></script>
 </html>
