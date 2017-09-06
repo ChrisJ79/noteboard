@@ -14,15 +14,29 @@
 <body>
     <div id='react-container'></div>
     <script type="text/babel">
+
+        var Note = React.createClass ({
+            render() {
+                return (
+                    <div className="note">
+                        <p></p>
+                        <span>
+                            <button>Edit</button>
+                            <button>X</button>
+                        </span>
+                    </div>
+                )
+            }
+        })
+
+
         ReactDOM.render(
-            <ul>
-                <li>item 1</li>
-                <li>item 2</li>
-                <li>item 3</li>
-            </ul>,
+            <Note />,
             document.getElementById('react-container')
         );
-        // ReactDOM.render('div', null, 'Hello World'), document.getElementById('react-container')
+
+
+
     </script>
 </body>
 <script type="text/javascript" src="js/app.js"></script>
