@@ -12,7 +12,8 @@
         <div id='react-container'></div>
 
         <script type="text/babel">
-        //Note Class
+
+        //NOTE COMPONENT
         var Note = React.createClass({
             getInitialState() {
                 return {editing: false}
@@ -21,12 +22,11 @@
                 this.setState({editing: true})
             },
             save() {
-                var val = this.refs.newText.value
-                alert("This value will be saved: " + val);
+                this.props.onChange(this.refs.newText.value, this.props.id)
                 this.setState({editing: false})
             },
             remove() {
-                alert("Removing Note")
+                this.props.onRemove(this.props.id)
             },
             renderForm() {
                 return (
@@ -48,11 +48,13 @@
                     )
             },
             render() {
-              return (this.state.editing === true) ? this.renderForm(): this.renderNote()
+              return (this.state.editing) ? this.renderForm() : this.renderNote()
 
             }
         })
-        //Board Class
+
+
+        //BOARD COMPONENT
         var Board = React.createClass({
             propTypes: {
                 count: function(props, propName) {
@@ -61,41 +63,62 @@
                     }
 
                     if(props[propName] > 100) {
-                        return new Error('There\'s no need to create more than ' + props[propName] + ' notes!')
+                        return new Error('There is no need to create more than ' + props[propName] + ' notes!')
                     }
                 }
             },
             getInitialState() {
                 return {
-                    notes: {
-                      {id: 0, note: 'Call Wife'},
-                      {id: 1, note: 'Get stapler back from Lumbergh'},
-                      {id: 2, note: 'Grab lunch'},
-                      {id: 3, note: 'Finish App'}
-                  }
+                    notes: [
+                    //   {id: 0, note: 'Call Wife'},
+                    //   {id: 1, note: 'Get stapler back from Lumbergh'},
+                    //   {id: 2, note: 'Grab lunch'},
+                    //   {id: 3, note: 'Finish App'}
+                  ]
                 }
+            },
+            nextId() {
+                this.uniqueId = this.uniqueId || 0;
+                return this.uniqueId++;
+            },
+            //Function to add new notes
+            add(text) {
+                var notes = [
+                    ...this.state.notes,
+                    {id: this.nextId(),
+                    note: text
+                    }
+                ]
+                this.setState({notes})
             },
             update(newText, id) {
                 var notes = this.state.notes.map(
-                    note => (note.id !== id) ? note : {...note, note = newText}
-                )
-                this.setState({notes});
+                    note => (note.id !== id) ?
+                       note :
+                        {
+                            ...note,
+                            note: newText
+                        }
+                    )
+                this.setState({notes})
             },
             remove(id) {
-                var notes - this.state.notes.filter(note => note.id !== id);
-                this.setState({notes});
+                var notes = this.state.notes.filter(note => note.id !== id)
+                this.setState({notes})
             },
             eachNote(note) {
                 return (<Note key={note.id}
-                             id={note.id}
-                             onChange={this.update}
-                             onRemove={this.remove}>{note}</Note>
-                         )
+                              id={note.id}
+                              onChange={this.update}
+                              onRemove={this.remove}>
+                          {note.note}
+                        </Note>)
             },
             render() {
                 return (<div className='board'>
-                    {this.state.notes.map((this.eachNote)
-                    </div>)
+                           {this.state.notes.map(this.eachNote)}
+                           <button onClick={() => this.add()}>+</button>
+                        </div>)
             }
         })
 
