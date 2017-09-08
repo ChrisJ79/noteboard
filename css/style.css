@@ -1,11 +1,11 @@
-// Main Stylesheet
-@import url(http://fonts.googleapis.com/css?family=Shadows+Into+Light);
+//Main Stylesheet
+
+@import url(https://fonts.googleapis.com/css?family=Rock+Salt);
 
 body,
 html,
-div.board,
 div#react-container {
-  height: 100%;
+  height: 100vh !important;
   overflow: hidden;
 }
 
@@ -18,6 +18,7 @@ div.board {
   background-color: 'brown';
   width: 100%;
   background: #eab92d;
+  height: 100vh;
 }
 
 div.note {
@@ -25,7 +26,7 @@ div.note {
   width: 150px;
   background-color: yellow;
   margin: 2px 0;
-  position: absolute;
+  position: relative;
   cursor: -webkit-grab;
   box-shadow: 5px 5px 15px 0 rgba(0, 0, 0, .2);
   overflow: hidden;
@@ -39,7 +40,7 @@ div.note p {
   margin: 0;
   font-size: 22px;
   padding: 5px;
-  font-family: "Shadows Into Light", Arial;
+  font-family: 'Rock Salt', cursive;
 }
 
 div.note:hover > span {
