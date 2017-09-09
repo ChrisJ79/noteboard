@@ -4,6 +4,8 @@
         <script src="https://fb.me/react-15.2.1.js"></script>
         <script src="https://fb.me/react-dom-15.2.1.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.js"></script>
+        <script src="https://npmcdn.com/react-draggable"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css">
         <title>React Noteboard</title>
     </head>
@@ -18,6 +20,24 @@
             getInitialState() {
                 return {editing: false}
             },
+            componentWillMount() {
+                this.style = {
+                    right: this.randomBetween(0, window.innerWidth - 150, 'px'),
+                    top: this.randomBetween(0, window.innerWidth - 150, 'px')
+                }
+            },
+            componentDidUpdate() {
+                if (this.state.editing) {
+                    this.refs.newText.focus();
+                    this.refs.newText.select();
+                }
+            },
+            shouldComponentUpdate(nextProps, nextState) {
+                return this.props.children !== nextProps.children || this.props.state !== nextState;
+            },
+            randomBetween(x,y,s) {
+                return x + Math.ceil(Math.random() * (y-x)) + s
+            },
             edit() {
                 this.setState({editing: true})
             },
@@ -30,25 +50,28 @@
             },
             renderForm() {
                 return (
-                    <div className="note">
-                      <textarea ref="newText"></textarea>
+                    <div className="note" style={this.style}>
+                      <textarea ref="newText" defaultValue={this.props.children}></textarea>
                       <button onClick={this.save}>Save!</button>
                     </div>
                 )
             },
             renderNote() {
                 return (
-                    <div className="note">
+                    <div className="note" style={this.style}>
                         <p>{this.props.children}</p>
                         <span>
                           <button onClick={this.edit}>EDIT</button>
                           <button onClick={this.remove}>X</button>
                         </span>
                     </div>
-                    )
+                )
             },
             render() {
-              return (this.state.editing) ? this.renderForm() : this.renderNote()
+              return ( <ReactDraggable>
+                  {(this.state.editing) ? this.renderForm() : this.renderNote()}
+                       </ReactDraggable>
+              )
 
             }
         })
