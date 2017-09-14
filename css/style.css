@@ -1,11 +1,11 @@
-//Main Stylesheet
+
 
 @import url(https://fonts.googleapis.com/css?family=Rock+Salt);
 
 body,
 html,
+div.board,
 div#react-container {
-  /*height: 100vh !important;*/
   height: 100%;
   overflow: hidden;
 }
@@ -15,11 +15,23 @@ body {
   padding: 0;
 }
 
+div.title-container {
+  font-family: sans-serif;
+  background: #eab92d;
+  text-align: center;
+  padding-top: 15px;
+  height: 10%;
+  margin: 0px;
+}
+
+div.title-container i {
+  font-size: 66px;
+}
+
 div.board {
   background-color: 'brown';
   width: 100%;
   background: #eab92d;
-  height: 100vh;
 }
 
 div.note {
@@ -27,7 +39,6 @@ div.note {
   width: 150px;
   background-color: yellow;
   margin: 2px 0;
-  /*position: relative;*/
   position: absolute;
   cursor: -webkit-grab;
   box-shadow: 5px 5px 15px 0 rgba(0, 0, 0, .2);
@@ -40,9 +51,12 @@ div.note:active {
 
 div.note p {
   margin: 0;
-  font-size: 22px;
-  padding: 5px;
+  font-size: 16px;
+  padding-top: 5px;
+  /*font-family: "Shadows Into Light", Arial;*/
   font-family: 'Rock Salt', cursive;
+  text-align: center;
+  line-height: 21px;
 }
 
 div.note:hover > span {

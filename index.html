@@ -7,47 +7,60 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/1.0.0/fetch.js"></script>
         <script src="https://npmcdn.com/react-draggable"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" href="https://cdn.rawgit.com/konpa/devicon/df6431e323547add1b4cf45992913f15286456d3/devicon.min.css">
         <title>React Noteboard</title>
     </head>
     <body>
-
+        <div class="title-container">
+            <h1>Chris's React Noteboard</h1>
+            <i class="devicon-react-original"></i>
+        </div>
         <div id='react-container'></div>
 
         <script type="text/babel">
 
         //NOTE COMPONENT
         var Note = React.createClass({
+            //Sets the initial state of the component.
             getInitialState() {
                 return {editing: false}
             },
+            //Generates random positioning of notes on the board.
             componentWillMount() {
                 this.style = {
                     right: this.randomBetween(0, window.innerWidth - 150, 'px'),
-                    top: this.randomBetween(0, window.innerWidth - 150, 'px')
+                    top: this.randomBetween(0, window.innerHeight - 150, 'px')
                 }
             },
+            //Lifecycle function enables note to be selected and focused upon to be 'written' on
             componentDidUpdate() {
                 if (this.state.editing) {
                     this.refs.newText.focus();
                     this.refs.newText.select();
                 }
             },
+
             shouldComponentUpdate(nextProps, nextState) {
                 return this.props.children !== nextProps.children || this.props.state !== nextState;
             },
+
             randomBetween(x,y,s) {
-                return x + Math.ceil(Math.random() * (y-x)) + s
+                return (x + Math.ceil(Math.random() * (y-x))) + s
             },
+            //Function that sets the state of the Note component and allows it to be edited.
             edit() {
                 this.setState({editing: true})
             },
+            //Saves data written to note, disables editing on note after new value
             save() {
                 this.props.onChange(this.refs.newText.value, this.props.id)
                 this.setState({editing: false})
             },
+            //Remove function causes note to be removed/deleted.
             remove() {
                 this.props.onRemove(this.props.id)
             },
+            //Function returns JSX expression of HTML elements that comprise each note when it's selected/being written on
             renderForm() {
                 return (
                     <div className="note" style={this.style}>
@@ -56,6 +69,7 @@
                     </div>
                 )
             },
+            //Function returns JSX expression of HTML elements that comprise each note before/after it's selected.
             renderNote() {
                 return (
                     <div className="note" style={this.style}>
@@ -67,6 +81,7 @@
                     </div>
                 )
             },
+            //Enables Note to be drag-and-dropped by React-Draggable
             render() {
               return ( <ReactDraggable>
                   {(this.state.editing) ? this.renderForm() : this.renderNote()}
@@ -90,6 +105,7 @@
                     }
                 }
             },
+            //Sets initial state of Board Component
             getInitialState() {
                 return {
                     notes: [
@@ -100,6 +116,7 @@
                   ]
                 }
             },
+            //Creates new Note ID
             nextId() {
                 this.uniqueId = this.uniqueId || 0;
                 return this.uniqueId++;
@@ -114,6 +131,7 @@
                 ]
                 this.setState({notes})
             },
+            //Enables notes to be updated/removed, sets new state of Note when called
             update(newText, id) {
                 var notes = this.state.notes.map(
                     note => (note.id !== id) ?
@@ -129,6 +147,7 @@
                 var notes = this.state.notes.filter(note => note.id !== id)
                 this.setState({notes})
             },
+            //Event Handler for updating and removing notes
             eachNote(note) {
                 return (<Note key={note.id}
                               id={note.id}
@@ -137,10 +156,11 @@
                           {note.note}
                         </Note>)
             },
+            //Returns JSX for adding a new Note
             render() {
                 return (<div className='board'>
                            {this.state.notes.map(this.eachNote)}
-                           <button onClick={() => this.add()}>+</button>
+                           <button onClick={() => this.add('NEW NOTE')}>+</button>
                         </div>)
             }
         })
